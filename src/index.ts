@@ -9,6 +9,7 @@ export class BigFloat {
   }
 
   static fromNumber (value: number): BigFloat {
+    if (Number.isNaN(value) || value === null || value === undefined) return new BigFloat(0n)
     return new BigFloat(BigInt(value))
   }
 

@@ -25,5 +25,5 @@ npm run test
 
 ## Run unit test with coverage (watch changes)
 ``` sh
-npm run dev
+npm run test:dev
 ```

@@ -5,7 +5,7 @@ export class BigFloat {
 
   constructor (decimal: bigint, fraction: number = 0) {
     this.decimal = decimal
-    this.fraction = fraction
+    this.fraction = fraction || 0
   }
 
   static fromNumber (value: number): BigFloat {
@@ -14,7 +14,17 @@ export class BigFloat {
     
     const splits = value.toString().split('.')
     return new BigFloat(
-      BigInt(Number(splits[0])),
+      BigInt(splits[0]),
+      Number(splits[1])
+    )
+  }
+
+  static fromString (value: string): BigFloat {
+    if (value === null || value === undefined || value.length === 0) return new BigFloat(0n)
+     
+    const splits = value.split('.')
+    return new BigFloat(
+      BigInt(splits[0]),
       Number(splits[1])
     )
   }

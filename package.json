@@ -1,0 +1,21 @@
+{
+  "name": "bigfloatjs",
+  "version": "1.0.0",
+  "description": "BigFloat type in JavaScript (for practice purpose)",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "npx tsc --watch",
+    "build": "npx tsc",
+    "test:dev": "jest --watch --coverage",
+    "test": "jest --coverage"
+  },
+  "author": "alba-636",
+  "license": "MIT",
+  "devDependencies": {
+    "@jest/globals": "^30.0.5",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.5",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
+  }
+}

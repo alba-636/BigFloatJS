@@ -5,7 +5,7 @@ Class to handle BigInt with decimals. (more for a practical exercice).
 ## Usage
 Installation
 ``` sh
-npm run install
+npm install
 ```
 
 ## Build for production

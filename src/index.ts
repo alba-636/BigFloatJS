@@ -10,7 +10,13 @@ export class BigFloat {
 
   static fromNumber (value: number): BigFloat {
     if (Number.isNaN(value) || value === null || value === undefined) return new BigFloat(0n)
-    return new BigFloat(BigInt(value))
+    if (Number.isInteger(value)) return new BigFloat(BigInt(value))
+    
+    const splits = value.toString().split('.')
+    return new BigFloat(
+      BigInt(Number(splits[0])),
+      Number(splits[1])
+    )
   }
 
   static addition (a: BigFloat, b: BigFloat): BigFloat {

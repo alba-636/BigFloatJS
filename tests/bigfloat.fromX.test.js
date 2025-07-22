@@ -25,9 +25,21 @@ describe('Test fromX() methods.', () => {
     expect(value.valueOf()).toBe(expected.valueOf())
   })
 
-  test('fromNumber(number) undefined value', () => {
-    const value = BigFloat.fromNumber(undefined)
-    const expected = new BigFloat(0n)
+  test('fromNumber(number) float value', () => {
+    const value = BigFloat.fromNumber(42.21)
+    const expected = new BigFloat(42n, 21)
+    expect(value.valueOf()).toBe(expected.valueOf())
+  })
+
+  test('fromNumber(number) float value (long fraction)', () => {
+    const value = BigFloat.fromNumber(42.21212121212121)
+    const expected = new BigFloat(42n, 21212121212121)
+    expect(value.valueOf()).toBe(expected.valueOf())
+  })
+
+  test('fromNumber(number) float value (long decimal)', () => {
+    const value = BigFloat.fromNumber(42424242424242.21)
+    const expected = new BigFloat(42424242424242n, 21)
     expect(value.valueOf()).toBe(expected.valueOf())
   })
 })

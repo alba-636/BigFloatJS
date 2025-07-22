@@ -1,11 +1,11 @@
 
 export class BigFloat {
-  num: bigint
-  fraction: number
+  private decimal: bigint
+  private fraction: number
 
-  constructor (a: bigint, b: number = 0) {
-    this.num = a
-    this.fraction = b
+  constructor (decimal: bigint, fraction: number = 0) {
+    this.decimal = decimal
+    this.fraction = fraction
   }
 
   static fromNumber (value: number): BigFloat {
@@ -19,9 +19,9 @@ export class BigFloat {
 
   toString (): string {
     if (this.fraction !== 0) {
-      return this.num.toString() + '.' + this.fraction.toString()
+      return this.decimal.toString() + '.' + this.fraction.toString()
     }
-    return this.num.toString()
+    return this.decimal.toString()
   }
 
   valueOf (): string {

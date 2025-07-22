@@ -1,7 +1,7 @@
 const { BigFloat } = require('../dist/index.js')
 
 describe('Test valueOf() method.', () => {
-  test('valueOf small number (without fractional)', () => {
+  test('valueOf small number (without fraction)', () => {
     const value = new BigFloat(42n)
     const expected = '42'
     expect(value.valueOf()).toBe(expected)

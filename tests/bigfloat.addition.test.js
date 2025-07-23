@@ -1,7 +1,7 @@
 const { BigFloat } = require('../dist/index.js')
 
 describe('Test addition() methods.', () => {
-  test('addition(number, number) null values', () => {
+  test('addition(BigFloat, BigFloat) null values', () => {
     const expected = new BigFloat(0n)
     expect(BigFloat.addition(null, BigFloat.fromNumber(42)).valueOf()).toBe(expected.valueOf())
     expect(BigFloat.addition(BigFloat.fromNumber(42), null).valueOf()).toBe(expected.valueOf())

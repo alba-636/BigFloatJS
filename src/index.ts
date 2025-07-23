@@ -7,12 +7,13 @@ export class BigFloat {
 
   private constructor (decimal: bigint, fraction: number = 0) {
     this.decimal = decimal
-    this.fraction = Number(fraction.toFixed(MAX_FRACTION_DIGITS))
+    const fractionSign = decimal < 0 ? -1 : 1
+    this.fraction = Math.abs(Number(fraction.toFixed(MAX_FRACTION_DIGITS))) * fractionSign
   }
 
   toString (): string {
     if (this.fraction !== 0) {
-      return this.decimal.toString() + '.' + this.fraction.toString().slice(2)
+      return this.decimal.toString() + '.' + Math.abs(this.fraction).toString().slice(2)
     }
     return this.decimal.toString()
   }
@@ -47,5 +48,25 @@ export class BigFloat {
     const decimal = a.decimal + b.decimal + BigInt(keep)
 
     return new BigFloat(decimal, fraction - keep)
+  }
+
+  static substraction (a: BigFloat, b: BigFloat): BigFloat {
+    if (!a || !b) return new BigFloat(0n)
+
+    const fractionSubstraction = Number((a.fraction - b.fraction).toFixed(MAX_FRACTION_DIGITS))
+    const decimalSubstraction = a.decimal - b.decimal
+    
+    // Do decimal should be incremented/decremented by one?
+    const keep = fractionSubstraction !== 0 && (fractionSubstraction < 0 !== decimalSubstraction < 0) ? 1 : 0
+    
+    const decimal = decimalSubstraction < 0
+      ? decimalSubstraction + BigInt(keep)
+      : decimalSubstraction - BigInt(keep)
+    
+    const fraction = keep === 0
+      ? Math.abs(fractionSubstraction)
+      : 1 - Math.abs(fractionSubstraction)
+
+    return new BigFloat(decimal, fraction)
   }
 }

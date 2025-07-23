@@ -69,4 +69,31 @@ export class BigFloat {
 
     return new BigFloat(decimal, fraction)
   }
+
+  static multiplication (a: BigFloat, b: BigFloat): BigFloat {
+    if (!a || !b) return new BigFloat(0n)
+
+    /*
+        a * b
+      = x.y * z.w
+      = z*x + z*y + w*x + w*y
+    */
+
+    const multiplicator = 10 ** MAX_FRACTION_DIGITS
+
+    const decimalMultiplication = b.decimal * a.decimal
+    const aFraction = a.fraction !== 0 ? (BigInt(a.fraction * multiplicator)) * b.decimal : 0n
+    const bFraction = b.fraction !== 0 ? (BigInt(b.fraction * multiplicator)) * a.decimal : 0n
+    const fractionMultiplication = b.fraction * a.fraction
+
+    const decimal = decimalMultiplication + (aFraction / BigInt(multiplicator)) + (bFraction / BigInt(multiplicator))
+    
+    const fraction = Math.abs(fractionMultiplication)
+      + Math.abs(Number(`0.${aFraction.toString().slice(-MAX_FRACTION_DIGITS)}`))
+      + Math.abs(Number(`0.${bFraction.toString().slice(-MAX_FRACTION_DIGITS)}`))
+
+    const fractionBigFloat = BigFloat.fromString(fraction.toString())
+
+    return new BigFloat(decimal + fractionBigFloat.decimal, fractionBigFloat.fraction)
+  }
 }

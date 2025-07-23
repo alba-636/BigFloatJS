@@ -1,22 +1,31 @@
 
+const MAX_FRACTION_DIGITS = 4
+
 export class BigFloat {
   private decimal: bigint
   private fraction: number
 
-  constructor (decimal: bigint, fraction: number = 0) {
+  private constructor (decimal: bigint, fraction: number = 0) {
     this.decimal = decimal
-    this.fraction = fraction || 0
+    this.fraction = Number(fraction.toFixed(MAX_FRACTION_DIGITS))
+  }
+
+  toString (): string {
+    if (this.fraction !== 0) {
+      return this.decimal.toString() + '.' + this.fraction.toString().slice(2)
+    }
+    return this.decimal.toString()
+  }
+
+  valueOf (): string {
+    return this.toString()
   }
 
   static fromNumber (value: number): BigFloat {
     if (Number.isNaN(value) || value === null || value === undefined) return new BigFloat(0n)
     if (Number.isInteger(value)) return new BigFloat(BigInt(value))
     
-    const splits = value.toString().split('.')
-    return new BigFloat(
-      BigInt(splits[0]),
-      Number(splits[1])
-    )
+    return BigFloat.fromString(value.toString())
   }
 
   static fromString (value: string): BigFloat {
@@ -25,22 +34,18 @@ export class BigFloat {
     const splits = value.split('.')
     return new BigFloat(
       BigInt(splits[0]),
-      Number(splits[1])
+      splits[1] ? Number(`0.${splits[1]}`) : 0
     )
   }
 
   static addition (a: BigFloat, b: BigFloat): BigFloat {
-    return new BigFloat(42n)
-  }
+    if (!a || !b) return new BigFloat(0n)
 
-  toString (): string {
-    if (this.fraction !== 0) {
-      return this.decimal.toString() + '.' + this.fraction.toString()
-    }
-    return this.decimal.toString()
-  }
+    const fraction = a.fraction + b.fraction
+    const keep = fraction >= 1 ? 1 : 0
 
-  valueOf (): string {
-    return this.toString()
+    const decimal = a.decimal + b.decimal + BigInt(keep)
+
+    return new BigFloat(decimal, fraction - keep)
   }
 }

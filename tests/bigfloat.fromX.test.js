@@ -28,20 +28,26 @@ describe('Test fromX() methods.', () => {
 
   test('fromNumber(number) float value', () => {
     const value = BigFloat.fromNumber(42.21)
-    const expected = new BigFloat(42n, 21)
+    const expected = new BigFloat(42n, 0.21)
+    expect(value.valueOf()).toBe(expected.valueOf())
+  })
+
+  test('fromNumber(number) float value x.042', () => {
+    const value = BigFloat.fromNumber(42.021)
+    const expected = new BigFloat(42n, 0.021)
     expect(value.valueOf()).toBe(expected.valueOf())
   })
 
   test('fromNumber(number) float value (long fraction)', () => {
     const value = BigFloat.fromNumber(42.21212121212121)
-    const expected = new BigFloat(42n, 21212121212121)
-    expect(value.valueOf()).toBe(expected.valueOf())
+    const expected = '42.2121'
+    expect(value.valueOf()).toBe(expected)
   })
 
   test('fromNumber(number) float value (long decimal)', () => {
     const value = BigFloat.fromNumber(42424242424242.21)
-    const expected = new BigFloat(42424242424242n, 21)
-    expect(value.valueOf()).toBe(expected.valueOf())
+    const expected = '42424242424242.21'
+    expect(value.valueOf()).toBe(expected)
   })
 
   /** BigFloat.fromString(string) */
@@ -65,25 +71,25 @@ describe('Test fromX() methods.', () => {
 
   test('fromString(number) float value', () => {
     const value = BigFloat.fromString('42.21')
-    const expected = new BigFloat(42n, 21)
+    const expected = new BigFloat(42n, 0.21)
     expect(value.valueOf()).toBe(expected.valueOf())
   })
 
   test('fromString(number) float value (long fraction)', () => {
     const value = BigFloat.fromString('42.21212121212121')
-    const expected = new BigFloat(42n, 21212121212121)
+    const expected = '42.2121'
     expect(value.valueOf()).toBe(expected.valueOf())
   })
 
   test('fromString(number) float value (long decimal)', () => {
     const value = BigFloat.fromString('42424242424242.21')
-    const expected = new BigFloat(42424242424242n, 21)
+    const expected = new BigFloat(42424242424242n, 0.21)
     expect(value.valueOf()).toBe(expected.valueOf())
   })
 
   test('fromString(number) float value (bigint)', () => {
     const value = BigFloat.fromString('42424242424242424242424242424242424242424242424242424242.212121')
-    const expected = new BigFloat(42424242424242424242424242424242424242424242424242424242n, 212121)
+    const expected = new BigFloat(42424242424242424242424242424242424242424242424242424242n, 0.212121)
     expect(value.valueOf()).toBe(expected.valueOf())
   })
 })

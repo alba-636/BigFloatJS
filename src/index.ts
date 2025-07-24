@@ -97,6 +97,7 @@ export class BigFloat {
         a * b
       = x.y * z.w
       = z*x + z*y + w*x + w*y
+      = f + g + h + j => TODO
     */
 
     const multiplicator = 10 ** MAX_FRACTION_DIGITS
@@ -116,4 +117,35 @@ export class BigFloat {
 
     return new BigFloat(decimal + fractionBigFloat.decimal, fractionBigFloat.fraction)
   }
+
+  static division (a: BigFloat, b: BigFloat): BigFloat {
+    if (!a || !b) return new BigFloat(0n)
+
+    function euclideanDivision (numerator: BigFloat, denominator: BigFloat): { quotient: bigint; remainder: BigFloat, sign: -1 | 1 } {
+      const sign = (numerator.decimal < 0 && denominator.decimal >= 0) || (denominator.decimal < 0 && numerator.decimal >= 0) ? -1 : 1
+      const N = numerator.absoluteValue()
+      const M = denominator.absoluteValue()
+
+      let quotient: bigint = 0n
+      let remainder: BigFloat = N
+  
+      while (remainder.isGreaterThan(M) || remainder.isEqualTo(M)) {
+        quotient += 1n
+        remainder = BigFloat.substraction(remainder, M)
+      }
+
+      return { quotient, remainder, sign }
+    }
+
+    const { quotient, remainder, sign } = euclideanDivision(a, b)
+    const decimal = quotient * BigInt(sign)
+
+    // Compute one more digits than needed to correctly round the result.
+    const multiplicator = 10 ** (MAX_FRACTION_DIGITS + 1)
+    const result = euclideanDivision(BigFloat.multiplication(remainder, BigFloat.fromNumber(multiplicator)), b)
+    const fraction = Number(`0.${result.quotient.toString().padStart(MAX_FRACTION_DIGITS + 1, '0')}`).toFixed(MAX_FRACTION_DIGITS)
+
+    return new BigFloat(decimal, Number(fraction))
+  }
+
 }

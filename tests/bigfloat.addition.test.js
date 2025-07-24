@@ -52,4 +52,17 @@ describe('Test addition() methods.', () => {
     expect(BigFloat.addition(undefined, null).valueOf()).toBe(expected)
   })
 
+  test('addition(BigFloat, BigFloat) negative value', () => {
+    const a = BigFloat.fromString('-42.42')
+    const b = BigFloat.fromString('21.21')
+    expect(BigFloat.addition(a, b).valueOf()).toBe('-21.21')
+    expect(BigFloat.addition(b, a).valueOf()).toBe('-21.21')
+  })
+
+  test('addition(BigFloat, BigFloat) negative values', () => {
+    const a = BigFloat.fromString('-42.42')
+    const b = BigFloat.fromString('-21.21')
+    expect(BigFloat.addition(a, b).valueOf()).toBe('-63.63')
+    expect(BigFloat.addition(b, a).valueOf()).toBe('-63.63')
+  })
 })

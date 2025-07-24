@@ -97,25 +97,22 @@ export class BigFloat {
         a * b
       = x.y * z.w
       = z*x + z*y + w*x + w*y
-      = f + g + h + j => TODO
+      = f + g + h + j
     */
 
     const multiplicator = 10 ** MAX_FRACTION_DIGITS
 
-    const decimalMultiplication = b.decimal * a.decimal
-    const aFraction = a.fraction !== 0 ? (BigInt(a.fraction * multiplicator)) * b.decimal : 0n
-    const bFraction = b.fraction !== 0 ? (BigInt(b.fraction * multiplicator)) * a.decimal : 0n
-    const fractionMultiplication = b.fraction * a.fraction
+    const f = b.decimal * a.decimal
+    const g = b.decimal * BigInt(a.fraction * multiplicator)
+    const h = BigInt(b.fraction * multiplicator) * a.decimal
+    const j = b.fraction * a.fraction
 
-    const decimal = decimalMultiplication + (aFraction / BigInt(multiplicator)) + (bFraction / BigInt(multiplicator))
-    
-    const fraction = Math.abs(fractionMultiplication)
-      + Math.abs(Number(`0.${aFraction.toString().slice(-MAX_FRACTION_DIGITS)}`))
-      + Math.abs(Number(`0.${bFraction.toString().slice(-MAX_FRACTION_DIGITS)}`))
+    const fBigFloat = new BigFloat(f)
+    const gBigFloat = new BigFloat(g / BigInt(multiplicator), Number(`0.${g.toString().slice(-MAX_FRACTION_DIGITS).padStart(MAX_FRACTION_DIGITS, '0')}`))
+    const hBigFloat = new BigFloat(h / BigInt(multiplicator), Number(`0.${h.toString().slice(-MAX_FRACTION_DIGITS).padStart(MAX_FRACTION_DIGITS, '0')}`))
+    const jBigFLoat = BigFloat.fromNumber(j)
 
-    const fractionBigFloat = BigFloat.fromString(fraction.toString())
-
-    return new BigFloat(decimal + fractionBigFloat.decimal, fractionBigFloat.fraction)
+    return [fBigFloat, gBigFloat, hBigFloat, jBigFLoat].reduce(BigFloat.addition, BigFloat.fromNumber(0))
   }
 
   static division (a: BigFloat, b: BigFloat): BigFloat {

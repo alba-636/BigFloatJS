@@ -6,9 +6,13 @@ export class BigFloat {
   private fraction: number
 
   private constructor (decimal: bigint, fraction: number = 0) {
-    this.decimal = decimal
-    const fractionSign = decimal < 0 ? -1 : 1
-    this.fraction = Math.abs(Number(fraction.toFixed(MAX_FRACTION_DIGITS))) * fractionSign
+    const decimalSign = decimal < 0 ? -1 : 1
+    const fractionSign = fraction < 0 ? -1 : 1
+    const sign = decimal !== 0n ? decimalSign : fractionSign
+
+    this.decimal = decimalSign !== sign ? decimal * BigInt(sign) : decimal
+    const fractionRounded = Number(fraction.toFixed(MAX_FRACTION_DIGITS))
+    this.fraction = fractionSign !== sign ? fractionRounded * sign : fractionRounded
   }
 
   toString (): string {
@@ -43,24 +47,22 @@ export class BigFloat {
   }
 
   static fromNumber (value: number): BigFloat {
-    if (Number.isNaN(value) || value === null || value === undefined) return new BigFloat(0n)
-    if (Number.isInteger(value)) return new BigFloat(BigInt(value))
-    
+    if (Number.isNaN(value) || value === null || value === undefined) return BigFloat.fromNumber(0)
     return BigFloat.fromString(value.toString())
   }
 
   static fromString (value: string): BigFloat {
-    if (value === null || value === undefined || value.length === 0) return new BigFloat(0n)
-     
+    if (value === null || value === undefined || value.length === 0) return BigFloat.fromNumber(0)
+    const sign = value.startsWith('-') ? -1 : 1
     const splits = value.split('.')
     return new BigFloat(
       BigInt(splits[0]),
-      splits[1] ? Number(`0.${splits[1]}`) : 0
+      splits[1] ? Number(`0.${splits[1]}`) * sign : 0
     )
   }
 
   static addition (a: BigFloat, b: BigFloat): BigFloat {
-    if (!a || !b) return new BigFloat(0n)
+    if (!a || !b) return BigFloat.fromNumber(0)
 
     const fraction = a.fraction + b.fraction
     const keep = fraction >= 1 ? 1 : 0
@@ -71,7 +73,7 @@ export class BigFloat {
   }
 
   static substraction (a: BigFloat, b: BigFloat): BigFloat {
-    if (!a || !b) return new BigFloat(0n)
+    if (!a || !b) return BigFloat.fromNumber(0)
 
     const fractionSubstraction = Number((a.fraction - b.fraction).toFixed(MAX_FRACTION_DIGITS))
     const decimalSubstraction = a.decimal - b.decimal
@@ -91,7 +93,7 @@ export class BigFloat {
   }
 
   static multiplication (a: BigFloat, b: BigFloat): BigFloat {
-    if (!a || !b) return new BigFloat(0n)
+    if (!a || !b) return BigFloat.fromNumber(0)
 
     /*
         a * b
@@ -116,7 +118,7 @@ export class BigFloat {
   }
 
   static division (a: BigFloat, b: BigFloat): BigFloat {
-    if (!a || !b) return new BigFloat(0n)
+    if (!a || !b) return BigFloat.fromNumber(0)
 
     function euclideanDivision (numerator: BigFloat, denominator: BigFloat): { quotient: bigint; remainder: BigFloat, sign: -1 | 1 } {
       const sign = (numerator.decimal < 0 && denominator.decimal >= 0) || (denominator.decimal < 0 && numerator.decimal >= 0) ? -1 : 1

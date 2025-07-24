@@ -2,7 +2,7 @@ const { BigFloat } = require('../dist/index.js')
 
 describe('Test division() methods.', () => {
   test('division(BigFloat, BigFloat) null values', () => {
-    const expected = new BigFloat(0n)
+    const expected = BigFloat.fromNumber(0)
     expect(BigFloat.division(null, BigFloat.fromNumber(42)).valueOf()).toBe(expected.valueOf())
     expect(BigFloat.division(BigFloat.fromNumber(42), null).valueOf()).toBe(expected.valueOf())
     expect(BigFloat.division(null, undefined).valueOf()).toBe(expected.valueOf())

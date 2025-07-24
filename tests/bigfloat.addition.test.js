@@ -2,30 +2,30 @@ const { BigFloat } = require('../dist/index.js')
 
 describe('Test addition() methods.', () => {
   test('addition(BigFloat, BigFloat) null values', () => {
-    const expected = new BigFloat(0n)
+    const expected = BigFloat.fromNumber(0)
     expect(BigFloat.addition(null, BigFloat.fromNumber(42)).valueOf()).toBe(expected.valueOf())
     expect(BigFloat.addition(BigFloat.fromNumber(42), null).valueOf()).toBe(expected.valueOf())
     expect(BigFloat.addition(null, undefined).valueOf()).toBe(expected.valueOf())
   })
 
   test('addition(BigFloat, BigFloat) decimal only', () => {
-    const a = new BigFloat(31n)
-    const b = new BigFloat(11n)
-    const expected = new BigFloat(42n)
+    const a = BigFloat.fromString('31')
+    const b = BigFloat.fromString('11')
+    const expected = BigFloat.fromString('42')
     expect(BigFloat.addition(a, b).valueOf()).toBe(expected.valueOf())
   })
 
   test('addition(BigFloat, BigFloat) decimal only (bigint)', () => {
-    const a = new BigFloat(3100000000000000000000000000000000000000n)
-    const b = new BigFloat(1100000000000000000000000000000000000000n)
-    const expected = new BigFloat(4200000000000000000000000000000000000000n)
+    const a = BigFloat.fromString('3100000000000000000000000000000000000000')
+    const b = BigFloat.fromString('1100000000000000000000000000000000000000')
+    const expected = BigFloat.fromString('4200000000000000000000000000000000000000')
     expect(BigFloat.addition(a, b).valueOf()).toBe(expected.valueOf())
   })
 
   test('addition(BigFloat, BigFloat) decimal & fraction', () => {
-    const a = new BigFloat(31n, 0.11)
-    const b = new BigFloat(11n, 0.31)
-    const expected = new BigFloat(42n, 0.42)
+    const a = BigFloat.fromString('31.11')
+    const b = BigFloat.fromString('11.31')
+    const expected = BigFloat.fromString('42.42')
     expect(BigFloat.addition(a, b).valueOf()).toBe(expected.valueOf())
   })
 

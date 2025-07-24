@@ -2,7 +2,7 @@ const { BigFloat } = require('../dist/index.js')
 
 describe('Test multiplication() methods.', () => {
   test('multiplication(BigFloat, BigFloat) null values', () => {
-    const expected = new BigFloat(0n)
+    const expected = BigFloat.fromNumber(0)
     expect(BigFloat.multiplication(null, BigFloat.fromNumber(42)).valueOf()).toBe(expected.valueOf())
     expect(BigFloat.multiplication(BigFloat.fromNumber(42), null).valueOf()).toBe(expected.valueOf())
     expect(BigFloat.multiplication(null, undefined).valueOf()).toBe(expected.valueOf())

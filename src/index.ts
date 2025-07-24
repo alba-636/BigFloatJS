@@ -22,6 +22,26 @@ export class BigFloat {
     return this.toString()
   }
 
+  isEqualTo (b: BigFloat): boolean {
+    if (b === null || b === undefined) return false
+    return this.decimal === b.decimal && this.fraction === b.fraction
+  }
+
+  isGreaterThan (b: BigFloat): boolean {
+    if (b === null || b === undefined) return false
+    return this.decimal > b.decimal || (this.decimal === b.decimal && this.fraction > b.fraction)
+  }
+
+  isLowerThan (b: BigFloat): boolean {
+    if (b === null || b === undefined) return false
+    return this.decimal < b.decimal || (this.decimal === b.decimal && this.fraction < b.fraction)
+  }
+
+  absoluteValue (): BigFloat {
+    const sign = this.decimal < 0 ? -1 : 1
+    return BigFloat.multiplication(this, BigFloat.fromNumber(sign))
+  }
+
   static fromNumber (value: number): BigFloat {
     if (Number.isNaN(value) || value === null || value === undefined) return new BigFloat(0n)
     if (Number.isInteger(value)) return new BigFloat(BigInt(value))
